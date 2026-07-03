@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "api/**/*.ts",
+    "api/**/*.tsx",
+    "db/**/*.ts",
+    "platform/**/*.ts",
+    "services/**/*.ts",
+    "services/**/*.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "web/**/*.ts",
+    "web/**/*.tsx",
+    "worker.tsx",
+    "vitest.config.ts"
+  ]
+}
