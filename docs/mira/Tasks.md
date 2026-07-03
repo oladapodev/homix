@@ -13,7 +13,7 @@ Mira is the demo application for the `demo` branch. It is a compact open-source 
 - [x] Add repository/project records with name, slug, GitHub-style repo path, star count, language, status, summary, and created date.
 - [x] Add issue/task records with title, status, priority, type, assignee, labels, project id, created date, and updated date.
 - [x] Seed Mira with recognizable open-source-style project data.
-- [x] Remove auth tables and unrelated template data from the demo branch.
+- [x] Remove unrelated template data from the demo branch.
 
 ## Kanban And HTMX
 
@@ -32,10 +32,9 @@ Mira is the demo application for the `demo` branch. It is a compact open-source 
 
 ## Demo Cleanup
 
-- [x] Remove R2 file uploads from the Mira surface.
-- [x] Remove queue and cron job panels from the Mira surface.
-- [x] Remove the Durable Object counter demo from the Mira surface.
-- [x] Remove the component showroom from the Mira surface.
+- [x] Remove unrelated template panels from the Mira surface.
+- [x] Remove unused bindings, routes, services, tables, and fragments.
+- [x] Keep the visible app focused on Mira and a small Built on Homix note.
 
 ## API And Docs
 

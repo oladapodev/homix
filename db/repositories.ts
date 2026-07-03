@@ -131,12 +131,12 @@ export async function seedProjects(db: D1Database) {
   });
   await createIssue(db, {
     projectId: "hono",
-    title: "Document Cloudflare queue retry pattern",
+    title: "Document edge API retry pattern",
     status: "in_progress",
     priority: "medium",
     type: "docs",
     assignee: "Grace",
-    labels: "docs,workers",
+    labels: "docs,edge",
   });
   await createIssue(db, {
     projectId: "htmx",

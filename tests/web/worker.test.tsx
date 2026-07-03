@@ -29,6 +29,10 @@ describe("worker routes", () => {
     expect(html).toContain("Built on Homix");
     expect(html).toContain('href="#board"');
     expect(html).toContain('href="#foundation"');
+    expect(html).not.toContain("Theme island");
+    expect(html).not.toContain("API contract");
+    expect(html).not.toContain("Background jobs");
+    expect(html).not.toContain("Issue attachments");
     expect(html).toContain('href="/styles/generated.css"');
   });
 

@@ -14,11 +14,7 @@ export const Layout: FC<PropsWithChildren<{ title?: string }>> = ({
       <script src="/assets/htmx.min.js" defer />
       <script src="/assets/alpine.min.js" defer />
     </head>
-    <body
-      class="app-body"
-      x-data="{ theme: 'corporate' }"
-      x-init="theme = localStorage.getItem('homix-theme') || 'corporate'; $watch('theme', value => { document.documentElement.dataset.theme = value; localStorage.setItem('homix-theme', value) }); document.documentElement.dataset.theme = theme"
-    >
+    <body class="app-body">
       <div class="app-shell">
         <input id="nav-drawer" type="checkbox" class="nav-toggle" />
         <aside class="app-sidebar">
@@ -54,17 +50,6 @@ export const Header: FC = () => (
     </div>
     <div class="topbar-title">
       <span>Open-source project command center</span>
-    </div>
-    <div class="theme-switcher">
-      <button type="button" x-on:click="theme = 'corporate'">
-        Corporate
-      </button>
-      <button type="button" x-on:click="theme = 'emerald'">
-        Emerald
-      </button>
-      <button type="button" x-on:click="theme = 'dark'">
-        Dark
-      </button>
     </div>
     <div>
       <a class="btn btn-sm btn-primary" href="/reference">

@@ -112,23 +112,10 @@ a {
   font-size: 0.9rem;
 }
 
-.theme-switcher,
 .button-row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-}
-
-.theme-switcher button {
-  min-height: 2rem;
-  border: 1px solid var(--color-base-300);
-  border-radius: 999px;
-  background: var(--color-base-100);
-  color: var(--color-base-content);
-  padding: 0.25rem 0.7rem;
-  font-size: 0.78rem;
-  font-weight: 700;
-  cursor: pointer;
 }
 
 .content-shell {
@@ -187,8 +174,6 @@ a {
 .panel,
 .form-panel,
 .list-card,
-.table-panel,
-.component-tile,
 .demo-panel {
   border: 1px solid var(--color-base-300);
   border-radius: 0.75rem;
@@ -234,8 +219,7 @@ a {
 
 .panel h2,
 .demo-panel h2,
-.list-card h2,
-.component-tile h2 {
+.list-card h2 {
   margin: 0;
   color: var(--color-base-content);
   font-size: 1rem;
@@ -280,8 +264,7 @@ a {
 
 .input,
 .select,
-.textarea,
-.file-input {
+.textarea {
   width: 100%;
   min-height: 2.5rem;
   border: 1px solid var(--color-base-300);
@@ -310,30 +293,6 @@ a {
   border-color: var(--color-primary);
   background: var(--color-primary);
   color: var(--color-primary-content);
-}
-
-.theme-preview {
-  display: grid;
-  gap: 1rem;
-}
-
-.preview-card {
-  display: grid;
-  gap: 0.75rem;
-  min-height: 10rem;
-  align-content: center;
-  border-radius: 0.75rem;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-  color: var(--color-primary-content);
-  padding: 1.25rem;
-}
-
-.preview-card[data-tone="accent"] {
-  background: linear-gradient(
-    135deg,
-    var(--color-secondary),
-    var(--color-warning)
-  );
 }
 
 .icon-button {
@@ -455,42 +414,6 @@ a {
   display: none;
 }
 
-.table-panel {
-  overflow-x: auto;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table th,
-.table td {
-  border-bottom: 1px solid var(--color-base-300);
-  padding: 0.8rem 1rem;
-  text-align: left;
-}
-
-.component-tile {
-  display: grid;
-  gap: 0.5rem;
-  padding: 1rem;
-}
-
-.component-tile span {
-  color: var(--color-primary);
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-
-.code-panel {
-  overflow-x: auto;
-  border-radius: 0.75rem;
-  background: var(--color-neutral);
-  color: var(--color-neutral-content);
-  padding: 1rem;
-}
-
 .alert {
   border-radius: 0.5rem;
   padding: 0.75rem;
@@ -513,21 +436,6 @@ a {
 .muted {
   color: color-mix(in oklab, var(--color-base-content) 62%, transparent);
   line-height: 1.6;
-}
-
-.component-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.component-cloud span {
-  border: 1px solid var(--color-base-300);
-  border-radius: 999px;
-  background: var(--color-base-200);
-  padding: 0.35rem 0.7rem;
-  font-size: 0.82rem;
-  font-weight: 700;
 }
 
 @media (max-width: 860px) {
