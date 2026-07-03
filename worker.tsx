@@ -6,7 +6,8 @@ import { app } from "@/web/app";
 export { CounterDurableObject };
 
 export default {
-  fetch: app.fetch,
+  fetch: (request: Request, env: WorkerEnv, ctx?: ExecutionContext) =>
+    app.fetch(request, env, ctx),
   queue: processQueue,
   scheduled: (_event: ScheduledEvent, env: WorkerEnv) => processCron(env),
 };

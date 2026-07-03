@@ -6,6 +6,7 @@
   "packageManager": "bun@1.2.18",
   "scripts": {
     "dev": "wrangler dev --local --port 8787",
+    "dev:preview": "bun scripts/dev-preview.ts",
     "build:assets": "bun scripts/copy-assets.ts",
     "build:css": "tailwindcss -i ./web/styles/app.css -o ./public/styles/generated.css --minify",
     "lint": "biome check .",
