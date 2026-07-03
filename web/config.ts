@@ -1,12 +1,14 @@
 export const appConfig = {
-  name: "Homix",
-  description: "Hono, HTMX, daisyUI, and Cloudflare full-stack template",
+  name: "Mira",
+  description: "Open-source project tracking demo for the Homix template",
   nav: [
-    { href: "#projects", label: "Projects" },
-    { href: "#theme", label: "Theme" },
+    { href: "#board", label: "Board" },
+    { href: "#new-issue", label: "New Issue" },
+    { href: "#repositories", label: "Repos" },
     { href: "#files", label: "Files" },
     { href: "#jobs", label: "Jobs" },
     { href: "#api", label: "API" },
+    { href: "#theme", label: "Theme" },
     { href: "#components", label: "Components" },
   ],
 } as const;

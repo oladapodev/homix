@@ -3,12 +3,12 @@ import { recordJob } from "@/db/repositories";
 import { nowIso } from "@/db/types";
 import type { JobMessage, WorkerEnv } from "@/platform/env";
 
-export async function enqueueDemoJob(env: WorkerEnv) {
+export async function enqueueDemoJob(env: WorkerEnv, source = "htmx-form") {
   await ensureSchema(env.DB);
   const message: JobMessage = {
     id: crypto.randomUUID(),
     kind: "demo",
-    payload: { source: "htmx-form" },
+    payload: { source },
     createdAt: nowIso(),
   };
   await env.JOBS.send(message);

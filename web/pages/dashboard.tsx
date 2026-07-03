@@ -1,33 +1,80 @@
-import type { FileRecord, JobRecord, Project } from "@/db/types";
+import type { FileRecord, Issue, JobRecord, Project } from "@/db/types";
 import { Layout, PageTitle, Stat } from "@/web/components/layout";
 import { FileList, FileUploadForm } from "@/web/fragments/files";
 import { JobPanel } from "@/web/fragments/jobs";
-import { ProjectForm, ProjectList } from "@/web/fragments/projects";
+import { IssueForm, KanbanBoard, RepositoryList } from "@/web/fragments/mira";
 import { showroomComponents } from "@/web/showroom/components";
 
 interface DashboardProps {
   projects: Project[];
+  issues: Issue[];
   files: FileRecord[];
   jobs: JobRecord[];
 }
 
-export function DashboardPage({ projects, files, jobs }: DashboardProps) {
+export function DashboardPage({
+  projects,
+  issues,
+  files,
+  jobs,
+}: DashboardProps) {
+  const totalStars = projects.reduce((sum, project) => sum + project.stars, 0);
+
   return (
     <Layout title="Dashboard">
-      <PageTitle eyebrow="Template">Full-stack Cloudflare app shell</PageTitle>
+      <PageTitle eyebrow="Mira">Open-source project tracker</PageTitle>
       <section class="dashboard-grid" aria-label="Template status">
-        <Stat label="Projects" value={projects.length} detail="D1 + Drizzle" />
-        <Stat label="Files" value={files.length} detail="R2 metadata demo" />
+        <Stat
+          label="Repositories"
+          value={projects.length}
+          detail={`${totalStars.toLocaleString()} stars tracked`}
+        />
+        <Stat label="Issues" value={issues.length} detail="D1 + HTMX board" />
         <Stat label="Jobs" value={jobs.length} detail="Queues and cron" />
       </section>
       <div class="demo-grid">
-        <section id="projects" class="demo-panel">
+        <section id="board" class="demo-panel demo-panel-wide">
           <div>
             <span class="demo-kicker">Hono + JSX + HTMX</span>
-            <h2>Project board</h2>
+            <h2>Kanban board</h2>
           </div>
-          <ProjectForm />
-          <ProjectList projects={projects} />
+          <div
+            class="board-filter"
+            x-data="{ type: 'all' }"
+            x-bind:data-type="type"
+          >
+            <div class="button-row">
+              <button type="button" class="btn" x-on:click="type = 'all'">
+                All
+              </button>
+              <button type="button" class="btn" x-on:click="type = 'bug'">
+                Bugs
+              </button>
+              <button type="button" class="btn" x-on:click="type = 'feature'">
+                Features
+              </button>
+              <button type="button" class="btn" x-on:click="type = 'docs'">
+                Docs
+              </button>
+            </div>
+            <KanbanBoard issues={issues} projects={projects} />
+          </div>
+        </section>
+        <section id="new-issue" class="demo-panel">
+          <div>
+            <span class="demo-kicker">Typed forms</span>
+            <h2>Create issue</h2>
+          </div>
+          <IssueForm projects={projects} />
+        </section>
+      </div>
+      <div class="demo-grid">
+        <section id="repositories" class="demo-panel">
+          <div>
+            <span class="demo-kicker">Open source signals</span>
+            <h2>Tracked repositories</h2>
+          </div>
+          <RepositoryList projects={projects} />
         </section>
         <section id="theme" class="demo-panel">
           <div>
@@ -56,7 +103,7 @@ export function DashboardPage({ projects, files, jobs }: DashboardProps) {
         <section id="files" class="demo-panel">
           <div>
             <span class="demo-kicker">R2 + D1</span>
-            <h2>File metadata flow</h2>
+            <h2>Issue attachments</h2>
           </div>
           <FileUploadForm />
           <FileList files={files} />

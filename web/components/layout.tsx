@@ -53,7 +53,7 @@ export const Header: FC = () => (
       </label>
     </div>
     <div class="topbar-title">
-      <span>Cloudflare Worker template</span>
+      <span>Open-source project command center</span>
     </div>
     <div class="theme-switcher">
       <button type="button" x-on:click="theme = 'corporate'">

@@ -93,7 +93,9 @@ The UI uses server-rendered JSX, Tailwind v4, daisyUI v5, htmx, and small Alpine
 Routes:
 
 - `/`: dashboard shell.
-- `/projects`: CRUD demo with HTMX form validation and fragment swaps.
+- `/issues`: Mira issue creation and kanban status updates with HTMX fragment swaps.
+- `/api/projects`: tracked open-source repositories.
+- `/api/issues`: Mira issue board records.
 - `/files`: R2 upload form and file list.
 - `/jobs`: Queue and cron status demo.
 - `/counter/:id`: Durable Object state demo.

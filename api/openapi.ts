@@ -22,3 +22,56 @@ export const healthRoute = createRoute({
     },
   },
 });
+
+export const projectsRoute = createRoute({
+  method: "get",
+  path: "/api/projects",
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            projects: z.array(
+              z.object({
+                id: z.string(),
+                name: z.string(),
+                repo: z.string(),
+                stars: z.number(),
+                language: z.string(),
+                status: z.string(),
+              }),
+            ),
+          }),
+        },
+      },
+      description: "Tracked open-source repositories",
+    },
+  },
+});
+
+export const issuesRoute = createRoute({
+  method: "get",
+  path: "/api/issues",
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            issues: z.array(
+              z.object({
+                id: z.string(),
+                projectId: z.string(),
+                title: z.string(),
+                status: z.string(),
+                priority: z.string(),
+                type: z.string(),
+                assignee: z.string(),
+              }),
+            ),
+          }),
+        },
+      },
+      description: "Mira issue board records",
+    },
+  },
+});
