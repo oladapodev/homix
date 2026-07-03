@@ -3,4 +3,6 @@ node_modules
 .dev.vars
 dist
 coverage
-apps/web/src/worker-configuration.d.ts
+platform/worker-configuration.d.ts
+docs/.vitepress/cache
+docs/.vitepress/dist

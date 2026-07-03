@@ -42,6 +42,20 @@ Add web code here:
 
 Do not mix route handlers into fragments. Fragments should render UI. Routes should parse requests, call services/repositories, and return pages or fragments.
 
+## Documentation Layer
+
+Use `docs/` for the VitePress documentation site. On `main`, docs are the primary project experience. Keep product demos and task applications out of `docs/` unless they explain how the template works.
+
+Add documentation code here:
+
+- `docs/.vitepress/config.ts`: VitePress navigation and site configuration
+- `docs/index.md`: documentation landing page
+- `docs/layers/`: architecture and ownership guides for each source layer
+- `docs/testing.md`: verification workflow
+- `docs/deployment.md`: deploy workflow
+
+When adding or moving docs pages, update `docs/.vitepress/config.ts` and run `bun run docs:build`.
+
 ## Data Layer
 
 Use `db/` for D1 and shared data contracts:
@@ -94,6 +108,7 @@ Prefer the local Bun binary:
 /home/dev/.bun/bin/bun run lint
 /home/dev/.bun/bin/bun run typecheck
 /home/dev/.bun/bin/bun run test
+/home/dev/.bun/bin/bun run docs:build
 ```
 
 Run Wrangler checks when the local runtime allows them to exit cleanly:

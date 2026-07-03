@@ -1,30 +1,50 @@
 # Homix
 
-Single-page Cloudflare Worker demo using Hono, HTMX, Alpine, daisyUI,
-D1, R2, Queues, Durable Objects, OpenAPI, and Scalar.
+Hono + HTMX + Cloudflare Workers template with VitePress documentation.
+
+The primary experience on `main` is the documentation site in `docs/`. The
+Worker dashboard is a small smoke surface for local verification, not a product
+demo.
 
 ## Run
 
 ```bash
 bun install
+bun run docs:dev
+```
+
+Open the VitePress site at `http://localhost:5173`.
+
+## Worker Smoke App
+
+```bash
+bun run build:assets
+bun run build:css
 bun run dev
 ```
 
-Open `http://localhost:8787`.
+Open the Worker at `http://localhost:8787`.
 
-## What The Page Shows
+## Documentation Map
 
-- `Projects`: Hono JSX renders the form; HTMX posts to `/projects` and swaps the project list.
-- `Theme`: Alpine switches daisyUI themes and local island state.
-- `Files`: R2 upload flow with D1 metadata.
-- `Jobs`: Queue producer demo with job audit rows.
-- `API`: `/api/health`, `/doc`, and Scalar at `/reference`.
-- `Components`: local daisyUI component catalog summary.
+- `docs/index.md`: docs landing page.
+- `docs/architecture.md`: runtime and request flow.
+- `docs/folder-ownership.md`: folder boundaries.
+- `docs/layers/`: web, HTMX, API, DB, services, and Cloudflare binding guides.
+- `docs/testing.md`: verification strategy.
+- `docs/deployment.md`: Worker and docs deployment.
 
-The UI is one page. Supporting endpoints still exist because HTMX, API docs,
-uploads, queues, assets, and Durable Object demos need server routes.
+## Verification
 
-## Code Map
+```bash
+bun run format
+bun run lint
+bun run typecheck
+bun run test
+bun run docs:build
+```
+
+## Source Code Map
 
 - `worker.tsx`: small Cloudflare adapter for fetch, queue, cron, and Durable Object exports.
 - `api/`: API app unifier, OpenAPI registry, Scalar docs route, route helpers, validators, and middleware.
