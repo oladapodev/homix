@@ -1,10 +1,8 @@
 import type {
   CreateIssue,
   CreateProject,
-  FileRecord,
   Issue,
   IssueStatus,
-  JobRecord,
   Project,
 } from "@/db/types";
 import { nowIso, slugify } from "@/db/types";
@@ -224,59 +222,4 @@ export async function updateIssueStatus(
     .prepare("update issues set status = ?, updated_at = ? where id = ?")
     .bind(status, updatedAt, id)
     .run();
-}
-
-export async function listFiles(db: D1Database): Promise<FileRecord[]> {
-  return all<FileRecord>(
-    db,
-    "select id, key, filename, content_type as contentType, size, created_at as createdAt from files order by created_at desc",
-  );
-}
-
-export async function recordFile(
-  db: D1Database,
-  file: Omit<FileRecord, "id" | "createdAt">,
-): Promise<FileRecord> {
-  const record = { ...file, id: crypto.randomUUID(), createdAt: nowIso() };
-  await db
-    .prepare(
-      "insert into files (id, key, filename, content_type, size, created_at) values (?, ?, ?, ?, ?, ?)",
-    )
-    .bind(
-      record.id,
-      record.key,
-      record.filename,
-      record.contentType,
-      record.size,
-      record.createdAt,
-    )
-    .run();
-  return record;
-}
-
-export async function listJobs(db: D1Database): Promise<JobRecord[]> {
-  return all<JobRecord>(
-    db,
-    "select id, kind, status, payload, created_at as createdAt from jobs order by created_at desc limit 50",
-  );
-}
-
-export async function recordJob(
-  db: D1Database,
-  job: Omit<JobRecord, "id" | "createdAt">,
-): Promise<JobRecord> {
-  const record = { ...job, id: crypto.randomUUID(), createdAt: nowIso() };
-  await db
-    .prepare(
-      "insert into jobs (id, kind, status, payload, created_at) values (?, ?, ?, ?, ?)",
-    )
-    .bind(
-      record.id,
-      record.kind,
-      record.status,
-      record.payload,
-      record.createdAt,
-    )
-    .run();
-  return record;
 }

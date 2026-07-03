@@ -6,7 +6,6 @@ import {
   updateIssueStatus,
 } from "@/db/repositories";
 import type { WorkerEnv } from "@/platform/env";
-import { enqueueDemoJob } from "@/services/jobs";
 import { Toast } from "@/web/components/layout";
 import {
   IssueForm,
@@ -37,7 +36,6 @@ export function createIssueRoutes() {
     }
 
     await createIssue(c.env.DB, parsed.data);
-    await enqueueDemoJob(c.env, "issue-created");
     if (!isHtmx(c.req.raw.headers)) {
       return c.redirect("/#board", 303);
     }
@@ -57,7 +55,6 @@ export function createIssueRoutes() {
       return c.text("Invalid status", 422);
     }
     await updateIssueStatus(c.env.DB, c.req.param("id"), parsed.data);
-    await enqueueDemoJob(c.env, "issue-moved");
     const [records, projects] = await Promise.all([
       listIssues(c.env.DB),
       listProjects(c.env.DB),

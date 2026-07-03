@@ -9,8 +9,7 @@
     "binding": "PUBLIC_ASSETS"
   },
   "vars": {
-    "ENVIRONMENT": "local",
-    "BETTER_AUTH_URL": "http://localhost:8787"
+    "ENVIRONMENT": "local"
   },
   "d1_databases": [
     {
@@ -19,57 +18,17 @@
       "database_id": "00000000-0000-0000-0000-000000000000"
     }
   ],
-  "r2_buckets": [
-    {
-      "binding": "ASSETS",
-      "bucket_name": "homix-assets"
-    }
-  ],
-  "queues": {
-    "producers": [
-      {
-        "binding": "JOBS",
-        "queue": "homix-jobs"
-      }
-    ],
-    "consumers": [
-      {
-        "queue": "homix-jobs",
-        "max_batch_size": 10,
-        "max_batch_timeout": 5
-      }
-    ]
-  },
-  "durable_objects": {
-    "bindings": [
-      {
-        "name": "COUNTER",
-        "class_name": "CounterDurableObject"
-      }
-    ]
-  },
-  "migrations": [
-    {
-      "tag": "v1",
-      "new_sqlite_classes": ["CounterDurableObject"]
-    }
-  ],
-  "triggers": {
-    "crons": ["*/15 * * * *"]
-  },
   "env": {
     "staging": {
       "name": "homix-web-staging",
       "vars": {
-        "ENVIRONMENT": "staging",
-        "BETTER_AUTH_URL": "https://staging.example.com"
+        "ENVIRONMENT": "staging"
       }
     },
     "production": {
       "name": "homix-web",
       "vars": {
-        "ENVIRONMENT": "production",
-        "BETTER_AUTH_URL": "https://example.com"
+        "ENVIRONMENT": "production"
       }
     }
   }

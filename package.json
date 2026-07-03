@@ -12,18 +12,16 @@
     "lint": "biome check .",
     "format": "biome check --write .",
     "typecheck": "tsc --noEmit",
-    "test": "bun test tests api web db platform services",
+    "test": "bun test tests api web db platform scripts",
     "test:vitest": "vitest run",
     "cf:types": "wrangler types ./platform/worker-configuration.d.ts",
     "cf:types:check": "wrangler types ./platform/worker-configuration.d.ts --check",
     "cf:dry-run": "wrangler deploy --dry-run"
   },
   "dependencies": {
-    "@better-auth/cli": "^1.2.12",
     "@hono/zod-openapi": "^0.19.8",
     "@scalar/hono-api-reference": "^0.8.10",
     "alpinejs": "^3.14.9",
-    "better-auth": "^1.2.12",
     "daisyui": "^5.0.43",
     "drizzle-orm": "^0.44.2",
     "hono": "^4.8.5",
@@ -33,7 +31,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@cloudflare/vitest-pool-workers": "^0.8.61",
     "@cloudflare/workers-types": "^4.20250628.0",
     "@tailwindcss/cli": "^4.1.11",
     "@tailwindcss/vite": "^4.1.11",

@@ -26,11 +26,9 @@ describe("worker routes", () => {
     expect(html).toContain("Mira");
     expect(html).toContain("Kanban board");
     expect(html).toContain("Open-source project tracker");
-    expect(html).toContain("Theme island");
-    expect(html).toContain("API contract");
+    expect(html).toContain("Built on Homix");
     expect(html).toContain('href="#board"');
-    expect(html).toContain('href="#api"');
-    expect(html).toContain('x-on:click="theme = &#39;dark&#39;"');
+    expect(html).toContain('href="#foundation"');
     expect(html).toContain('href="/styles/generated.css"');
   });
 
@@ -246,19 +244,7 @@ function mockEnv() {
           status: 200,
         }),
     },
-    ASSETS: {
-      put: async () => undefined,
-      get: async () => null,
-    },
-    JOBS: {
-      send: async () => undefined,
-    },
-    COUNTER: {
-      idFromName: (name: string) => name,
-      get: () => ({ fetch: async () => new Response("Count 0") }),
-    },
     ENVIRONMENT: "local",
-    BETTER_AUTH_URL: "http://localhost:8787",
     __issues: issues,
   } as never;
 }

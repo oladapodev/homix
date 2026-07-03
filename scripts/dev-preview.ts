@@ -1,12 +1,17 @@
 import { app } from "@/web/app";
 
 type RecordRow = Record<string, unknown>;
+type BunServer = {
+  serve(options: {
+    port: number;
+    fetch: (request: Request) => Response | Promise<Response>;
+  }): unknown;
+};
+
+declare const Bun: BunServer;
 
 const projects: RecordRow[] = [];
 const issues: RecordRow[] = [];
-const files: RecordRow[] = [];
-const jobs: RecordRow[] = [];
-const objects = new Map<string, { body: Blob; contentType: string }>();
 
 const db = {
   prepare: (sql: string) => ({
@@ -27,39 +32,7 @@ const env = {
       return fetch(new URL(`../public${url.pathname}`, import.meta.url));
     },
   },
-  ASSETS: {
-    put: async (key: string, value: ReadableStream | ArrayBuffer | string) => {
-      const body =
-        typeof value === "string"
-          ? new Blob([value])
-          : value instanceof ArrayBuffer
-            ? new Blob([value])
-            : await new Response(value).blob();
-      objects.set(key, {
-        body,
-        contentType: body.type || "application/octet-stream",
-      });
-    },
-    get: async (key: string) => {
-      const object = objects.get(key);
-      if (!object) {
-        return null;
-      }
-      return {
-        body: object.body.stream(),
-        httpMetadata: { contentType: object.contentType },
-      };
-    },
-  },
-  JOBS: {
-    send: async () => undefined,
-  },
-  COUNTER: {
-    idFromName: (name: string) => name,
-    get: () => ({ fetch: async () => new Response("Count 0") }),
-  },
   ENVIRONMENT: "local",
-  BETTER_AUTH_URL: "http://localhost:8787",
 } as never;
 
 Bun.serve({
@@ -80,12 +53,6 @@ function all(sql: string, bindings: unknown[]) {
   }
   if (sql.includes("from issues")) {
     return { results: issues };
-  }
-  if (sql.includes("from files")) {
-    return { results: files };
-  }
-  if (sql.includes("from jobs")) {
-    return { results: jobs };
   }
   return { results: [] };
 }
@@ -124,25 +91,6 @@ function run(sql: string, bindings: unknown[]) {
       issue.status = bindings[0];
       issue.updatedAt = bindings[1];
     }
-  }
-  if (sql.startsWith("insert into files")) {
-    files.unshift({
-      id: bindings[0],
-      key: bindings[1],
-      filename: bindings[2],
-      contentType: bindings[3],
-      size: bindings[4],
-      createdAt: bindings[5],
-    });
-  }
-  if (sql.startsWith("insert into jobs")) {
-    jobs.unshift({
-      id: bindings[0],
-      kind: bindings[1],
-      status: bindings[2],
-      payload: bindings[3],
-      createdAt: bindings[4],
-    });
   }
   return { success: true };
 }

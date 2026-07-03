@@ -1,19 +1,19 @@
 # Mira Demo Tasks
 
-Mira is the demo application for the `demo` branch. It is a compact open-source project tracker: a Jira-like board for repositories, issues, contributors, files, background activity, and API consumers.
+Mira is the demo application for the `demo` branch. It is a compact open-source project tracker: a Jira-like board for repositories, issues, contributors, and API consumers.
 
 ## Product Goal
 
 - [x] Replace the generic project-board demo with Mira.
 - [x] Show a realistic open-source project management workflow without becoming a full Jira clone.
-- [x] Demonstrate Hono, HTMX, Alpine, daisyUI, D1, R2, Queues, Cron, Durable Objects, OpenAPI, and Scalar in one cohesive example.
+- [x] Demonstrate Hono, HTMX, Alpine, daisyUI, D1, OpenAPI, and Scalar in one cohesive example.
 
 ## Core Demo Model
 
 - [x] Add repository/project records with name, slug, GitHub-style repo path, star count, language, status, summary, and created date.
 - [x] Add issue/task records with title, status, priority, type, assignee, labels, project id, created date, and updated date.
 - [x] Seed Mira with recognizable open-source-style project data.
-- [x] Keep auth tables ready but not central to the demo.
+- [x] Remove auth tables and unrelated template data from the demo branch.
 
 ## Kanban And HTMX
 
@@ -30,12 +30,12 @@ Mira is the demo application for the `demo` branch. It is a compact open-source 
 - [x] Keep daisyUI badges, buttons, tabs, stats, alerts, and cards visible in the page.
 - [x] Keep the theme island but make it secondary to Mira.
 
-## Files, Jobs, Cron, Durable Objects
+## Demo Cleanup
 
-- [x] Keep R2 uploads as issue/project attachments.
-- [x] Keep queue-backed activity jobs for issue creation and movement.
-- [x] Keep cron-backed maintenance or summary job records.
-- [x] Keep Durable Object counter demo as a live board/state example.
+- [x] Remove R2 file uploads from the Mira surface.
+- [x] Remove queue and cron job panels from the Mira surface.
+- [x] Remove the Durable Object counter demo from the Mira surface.
+- [x] Remove the component showroom from the Mira surface.
 
 ## API And Docs
 

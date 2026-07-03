@@ -1,41 +1,32 @@
-import type { FileRecord, Issue, JobRecord, Project } from "@/db/types";
+import type { Issue, Project } from "@/db/types";
 import { Layout, PageTitle, Stat } from "@/web/components/layout";
-import { FileList, FileUploadForm } from "@/web/fragments/files";
-import { JobPanel } from "@/web/fragments/jobs";
 import { IssueForm, KanbanBoard, RepositoryList } from "@/web/fragments/mira";
-import { showroomComponents } from "@/web/showroom/components";
 
 interface DashboardProps {
   projects: Project[];
   issues: Issue[];
-  files: FileRecord[];
-  jobs: JobRecord[];
 }
 
-export function DashboardPage({
-  projects,
-  issues,
-  files,
-  jobs,
-}: DashboardProps) {
+export function DashboardPage({ projects, issues }: DashboardProps) {
   const totalStars = projects.reduce((sum, project) => sum + project.stars, 0);
+  const activeIssues = issues.filter((issue) => issue.status !== "done").length;
 
   return (
     <Layout title="Dashboard">
       <PageTitle eyebrow="Mira">Open-source project tracker</PageTitle>
-      <section class="dashboard-grid" aria-label="Template status">
+      <section class="dashboard-grid" aria-label="Mira status">
         <Stat
           label="Repositories"
           value={projects.length}
           detail={`${totalStars.toLocaleString()} stars tracked`}
         />
-        <Stat label="Issues" value={issues.length} detail="D1 + HTMX board" />
-        <Stat label="Jobs" value={jobs.length} detail="Queues and cron" />
+        <Stat label="Issues" value={issues.length} detail="Tracked work" />
+        <Stat label="Active" value={activeIssues} detail="Not done yet" />
       </section>
       <div class="demo-grid">
         <section id="board" class="demo-panel demo-panel-wide">
           <div>
-            <span class="demo-kicker">Hono + JSX + HTMX</span>
+            <span class="demo-kicker">Mira board</span>
             <h2>Kanban board</h2>
           </div>
           <div
@@ -62,7 +53,7 @@ export function DashboardPage({
         </section>
         <section id="new-issue" class="demo-panel">
           <div>
-            <span class="demo-kicker">Typed forms</span>
+            <span class="demo-kicker">Issue intake</span>
             <h2>Create issue</h2>
           </div>
           <IssueForm projects={projects} />
@@ -71,93 +62,21 @@ export function DashboardPage({
       <div class="demo-grid">
         <section id="repositories" class="demo-panel">
           <div>
-            <span class="demo-kicker">Open source signals</span>
+            <span class="demo-kicker">Open-source signals</span>
             <h2>Tracked repositories</h2>
           </div>
           <RepositoryList projects={projects} />
         </section>
-        <section id="theme" class="demo-panel">
+        <section id="foundation" class="demo-panel">
           <div>
-            <span class="demo-kicker">Alpine + daisyUI</span>
-            <h2>Theme island</h2>
-          </div>
-          <div class="theme-preview" x-data="{ tone: 'primary' }">
-            <div class="preview-card" x-bind:data-tone="tone">
-              <span class="badge">Live island</span>
-              <strong x-text="tone === 'primary' ? 'Primary tone' : 'Accent tone'">
-                Primary tone
-              </strong>
-            </div>
-            <div class="button-row">
-              <button type="button" class="btn" x-on:click="tone = 'primary'">
-                Primary
-              </button>
-              <button type="button" class="btn" x-on:click="tone = 'accent'">
-                Accent
-              </button>
-            </div>
-          </div>
-        </section>
-      </div>
-      <div class="demo-grid">
-        <section id="files" class="demo-panel">
-          <div>
-            <span class="demo-kicker">R2 + D1</span>
-            <h2>Issue attachments</h2>
-          </div>
-          <FileUploadForm />
-          <FileList files={files} />
-        </section>
-        <section id="jobs" class="demo-panel">
-          <div>
-            <span class="demo-kicker">Queues + Cron</span>
-            <h2>Background jobs</h2>
-          </div>
-          <JobPanel jobs={jobs} />
-        </section>
-      </div>
-      <div class="demo-grid">
-        <section id="api" class="demo-panel">
-          <div>
-            <span class="demo-kicker">OpenAPI + Scalar</span>
-            <h2>API contract</h2>
+            <span class="demo-kicker">Built on Homix</span>
+            <h2>Hono, HTMX, Alpine, D1, OpenAPI</h2>
           </div>
           <p class="muted">
-            The visible app is one page, but it still exposes typed API
-            endpoints for clients and docs.
+            Mira is a focused demo for Homix: typed server-rendered UI, HTMX
+            updates, Alpine client filtering, D1 persistence, and documented API
+            endpoints.
           </p>
-          <div class="button-row">
-            <button
-              type="button"
-              class="btn btn-primary"
-              hx-get="/api/health"
-              hx-target="#api-result"
-              hx-swap="textContent"
-            >
-              Check API
-            </button>
-            <a class="btn" href="/reference">
-              Open Scalar
-            </a>
-          </div>
-          <pre id="api-result" class="code-panel">
-            Click Check API
-          </pre>
-        </section>
-        <section id="components" class="demo-panel">
-          <div>
-            <span class="demo-kicker">daisyUI</span>
-            <h2>Component map</h2>
-          </div>
-          <p class="muted">
-            {showroomComponents.length} daisyUI component examples are modeled
-            in the local showroom data.
-          </p>
-          <div class="component-cloud">
-            {showroomComponents.slice(0, 18).map((component) => (
-              <span key={component.slug}>{component.name}</span>
-            ))}
-          </div>
         </section>
       </div>
     </Layout>

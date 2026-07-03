@@ -68,7 +68,7 @@ export const Header: FC = () => (
     </div>
     <div>
       <a class="btn btn-sm btn-primary" href="/reference">
-        Docs
+        API
       </a>
     </div>
   </header>
