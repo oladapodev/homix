@@ -18,17 +18,26 @@
       "database_id": "00000000-0000-0000-0000-000000000000"
     }
   ],
+  "triggers": {
+    "crons": ["0 */6 * * *"]
+  },
   "env": {
     "staging": {
       "name": "homix-web-staging",
       "vars": {
         "ENVIRONMENT": "staging"
+      },
+      "triggers": {
+        "crons": ["0 */6 * * *"]
       }
     },
     "production": {
       "name": "homix-web",
       "vars": {
         "ENVIRONMENT": "production"
+      },
+      "triggers": {
+        "crons": ["0 */6 * * *"]
       }
     }
   }

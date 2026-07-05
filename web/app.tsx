@@ -16,6 +16,7 @@ import { ProjectDashboardPage } from "@/web/pages/project-dashboard";
 import { createAssetRoutes } from "@/web/routes/assets";
 import { createIssueRoutes } from "@/web/routes/issues";
 import { createProjectRoutes } from "@/web/routes/projects";
+import { createSchedulerRoutes } from "@/web/routes/scheduler";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { secureHeaders } from "hono/secure-headers";
@@ -45,6 +46,7 @@ export function createWebApp() {
   app.route("/", createAssetRoutes());
   app.route("/", createIssueRoutes());
   app.route("/", createProjectRoutes());
+  app.route("/", createSchedulerRoutes());
 
   app.get("/", async (c) => {
     const { projects, issues, pullRequests } = await loadMiraData(c.env);
