@@ -1,10 +1,9 @@
 export const appConfig = {
   name: "Mira",
-  description: "Open-source project tracking demo for the Homix template",
+  description:
+    "Live map of open-source projects: issues, pull requests, and how they link together.",
   nav: [
-    { href: "#board", label: "Board" },
-    { href: "#new-issue", label: "New Issue" },
-    { href: "#repositories", label: "Repos" },
-    { href: "#foundation", label: "Homix" },
+    { href: "/app", label: "Overview", icon: "home" },
+    { href: "/app/activity", label: "Activity", icon: "activity" },
   ],
 } as const;

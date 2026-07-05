@@ -2,6 +2,7 @@ import { app } from "@/web/app";
 
 type RecordRow = Record<string, unknown>;
 type BunServer = {
+  env: Record<string, string | undefined>;
   serve(options: {
     port: number;
     fetch: (request: Request) => Response | Promise<Response>;
@@ -12,6 +13,10 @@ declare const Bun: BunServer;
 
 const projects: RecordRow[] = [];
 const issues: RecordRow[] = [];
+const pullRequests: RecordRow[] = [];
+const issueLinks: RecordRow[] = [];
+const activityEvents: RecordRow[] = [];
+const commits: RecordRow[] = [];
 
 const db = {
   prepare: (sql: string) => ({
@@ -23,6 +28,8 @@ const db = {
     run: async () => run(sql, []),
   }),
 } as D1Database;
+
+const port = Number(Bun.env.PORT ?? 8917);
 
 const env = {
   DB: db,
@@ -36,11 +43,11 @@ const env = {
 } as never;
 
 Bun.serve({
-  port: 8787,
+  port,
   fetch: (request) => app.fetch(request, env),
 });
 
-console.log("Mira preview ready on http://localhost:8787");
+console.log(`Mira preview ready on http://localhost:${port}`);
 
 function all(sql: string, bindings: unknown[]) {
   if (sql.includes("where slug = ?")) {
@@ -48,11 +55,28 @@ function all(sql: string, bindings: unknown[]) {
       results: projects.filter((project) => project.slug === bindings[0]),
     };
   }
+  if (sql.includes("where id = ?") && sql.includes("from projects")) {
+    return {
+      results: projects.filter((project) => project.id === bindings[0]),
+    };
+  }
   if (sql.includes("from projects")) {
     return { results: projects };
   }
   if (sql.includes("from issues")) {
     return { results: issues };
+  }
+  if (sql.includes("from pull_requests")) {
+    return { results: pullRequests };
+  }
+  if (sql.includes("from issue_links")) {
+    return { results: issueLinks };
+  }
+  if (sql.includes("from activity_events")) {
+    return { results: activityEvents };
+  }
+  if (sql.includes("from commits")) {
+    return { results: commits };
   }
   return { results: [] };
 }
@@ -91,6 +115,50 @@ function run(sql: string, bindings: unknown[]) {
       issue.status = bindings[0];
       issue.updatedAt = bindings[1];
     }
+  }
+  if (sql.startsWith("insert into pull_requests")) {
+    pullRequests.unshift({
+      id: bindings[0],
+      projectId: bindings[1],
+      number: bindings[2],
+      title: bindings[3],
+      state: bindings[4],
+      author: bindings[5],
+      createdAt: bindings[6],
+      mergedAt: bindings[7],
+    });
+  }
+  if (sql.startsWith("insert into issue_links")) {
+    issueLinks.unshift({
+      id: bindings[0],
+      issueId: bindings[1],
+      pullRequestId: bindings[2],
+      linkType: bindings[3],
+      createdAt: bindings[4],
+    });
+  }
+  if (sql.startsWith("insert into activity_events")) {
+    activityEvents.unshift({
+      id: bindings[0],
+      projectId: bindings[1],
+      entityType: bindings[2],
+      entityId: bindings[3],
+      verb: bindings[4],
+      actor: bindings[5],
+      summary: bindings[6],
+      createdAt: bindings[7],
+    });
+  }
+  if (sql.startsWith("insert into commits")) {
+    commits.unshift({
+      id: bindings[0],
+      pullRequestId: bindings[1],
+      projectId: bindings[2],
+      sha: bindings[3],
+      message: bindings[4],
+      author: bindings[5],
+      createdAt: bindings[6],
+    });
   }
   return { success: true };
 }

@@ -14,3 +14,7 @@ copyFileSync(
   join(root, "node_modules/alpinejs/dist/cdn.min.js"),
   join(root, "public/assets/alpine.min.js"),
 );
+copyFileSync(
+  join(root, "node_modules/gsap/dist/gsap.min.js"),
+  join(root, "public/assets/gsap.min.js"),
+);

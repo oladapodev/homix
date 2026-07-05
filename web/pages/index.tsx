@@ -41,6 +41,32 @@ export function IndexPage({ projects, issues, pullRequests }: IndexPageProps) {
           </label>
         </div>
 
+        <div class="mb-8 flex justify-center">
+          <div class="w-full max-w-md">
+            <div class="mb-2 text-xs font-semibold text-base-content/60">
+              Add Open-Source Project
+            </div>
+            <form
+              hx-post="/api/projects/add"
+              hx-target="#add-project-form"
+              hx-swap="innerHTML"
+              class="flex gap-2"
+              id="add-project-form"
+            >
+              <input
+                type="text"
+                name="repo"
+                placeholder="owner/repo (e.g., facebook/react)"
+                class="input input-bordered input-sm flex-1"
+                required
+              />
+              <button type="submit" class="btn btn-primary btn-sm">
+                Add
+              </button>
+            </form>
+          </div>
+        </div>
+
         <div class="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
           <div class="rounded-3xl border border-base-300 bg-base-100 p-4 text-center shadow-sm">
             <div class="text-2xl font-bold text-base-content">

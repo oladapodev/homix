@@ -30,3 +30,59 @@ export const issues = sqliteTable("issues", {
   createdAt: text("created_at").notNull(),
   updatedAt: text("updated_at").notNull(),
 });
+
+export const pullRequests = sqliteTable("pull_requests", {
+  id: text("id").primaryKey(),
+  projectId: text("project_id").notNull(),
+  number: integer("number").notNull(),
+  title: text("title").notNull(),
+  state: text("state", {
+    enum: ["open", "merged", "closed"],
+  }).notNull(),
+  author: text("author").notNull(),
+  createdAt: text("created_at").notNull(),
+  mergedAt: text("merged_at"),
+});
+
+export const issueLinks = sqliteTable("issue_links", {
+  id: text("id").primaryKey(),
+  issueId: text("issue_id").notNull(),
+  pullRequestId: text("pull_request_id").notNull(),
+  linkType: text("link_type", {
+    enum: ["closes", "fixes", "references"],
+  }).notNull(),
+  createdAt: text("created_at").notNull(),
+});
+
+export const commits = sqliteTable("commits", {
+  id: text("id").primaryKey(),
+  pullRequestId: text("pull_request_id").notNull(),
+  projectId: text("project_id").notNull(),
+  sha: text("sha").notNull(),
+  message: text("message").notNull(),
+  author: text("author").notNull(),
+  createdAt: text("created_at").notNull(),
+});
+
+export const activityEvents = sqliteTable("activity_events", {
+  id: text("id").primaryKey(),
+  projectId: text("project_id").notNull(),
+  entityType: text("entity_type", {
+    enum: ["issue", "pull_request", "project"],
+  }).notNull(),
+  entityId: text("entity_id").notNull(),
+  verb: text("verb", {
+    enum: [
+      "opened",
+      "closed",
+      "merged",
+      "commented",
+      "status_changed",
+      "linked",
+      "created",
+    ],
+  }).notNull(),
+  actor: text("actor").notNull(),
+  summary: text("summary").notNull(),
+  createdAt: text("created_at").notNull(),
+});
