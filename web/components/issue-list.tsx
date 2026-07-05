@@ -16,7 +16,8 @@ export const IssueRow: FC<{
 }> = ({ issue, projectSlug, linkedPrCount }) => (
   <a
     href={`/projects/${projectSlug}/issues/${issue.id}`}
-    class="flex items-center gap-3 border-b border-base-300 px-4 py-3 transition hover:bg-base-200/50"
+    class="flex items-center gap-3 border-b border-base-200 px-5 py-3.5 transition last:border-b-0 hover:bg-base-200/40"
+    data-reveal
   >
     <div class="flex items-center gap-1.5">
       <TypeDot type={issue.type} class="h-2 w-2" />
@@ -56,10 +57,10 @@ export const IssueList: FC<{
   projectSlug: string;
   linkedPrCounts: Map<string, number>;
 }> = ({ issues, projectSlug, linkedPrCounts }) => (
-  <div class="rounded-3xl border border-base-300 bg-base-100 shadow-sm">
+  <div class="overflow-hidden rounded-3xl border border-base-300 bg-base-100 shadow-sm">
     {issues.length === 0 ? (
-      <div class="px-4 py-8 text-center text-sm text-base-content/40">
-        No issues found
+      <div class="px-4 py-14 text-center text-sm text-base-content/40">
+        No issues yet — synced from GitHub every 6 hours
       </div>
     ) : (
       issues.map((issue) => (

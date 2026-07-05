@@ -1,4 +1,4 @@
-import { IconMira, IconSearch } from "@/web/components/icons";
+import { IconMira } from "@/web/components/icons";
 import { ThemePicker } from "@/web/components/layout";
 import { appConfig } from "@/web/config";
 import type { FC, PropsWithChildren } from "hono/jsx";
@@ -28,14 +28,6 @@ export const AppLayout: FC<PropsWithChildren<{ title?: string }>> = ({
           <span class="text-sm font-bold tracking-tight">{appConfig.name}</span>
         </a>
         <div class="flex flex-1 items-center justify-end gap-2">
-          <button
-            type="button"
-            class="flex w-40 items-center gap-2 rounded-md border border-base-300 bg-base-100 px-2.5 py-1.5 text-left text-sm text-base-content/40 transition hover:border-base-content/20"
-          >
-            <IconSearch class="h-3.5 w-3.5" />
-            <span class="flex-1">Search…</span>
-            <kbd class="kbd kbd-xs">⌘K</kbd>
-          </button>
           <ThemePicker class="ms-auto" />
         </div>
       </header>
@@ -51,31 +43,56 @@ export const ProjectHeader: FC<{
   stats: { issues: number; prs: number; active: number; contributors: number };
   updated: string;
 }> = ({ name, language, stars, stats, updated }) => (
-  <div class="mb-4 rounded-3xl border border-base-300 bg-base-100 p-4 shadow-sm">
+  <div
+    class="mb-6 rounded-3xl border border-base-300 bg-base-100 p-6 shadow-sm"
+    data-reveal
+  >
     <div class="flex items-start justify-between gap-4">
       <div class="flex-1">
-        <h1 class="text-xl font-bold text-base-content">{name}</h1>
-        <p class="mt-0.5 text-xs font-medium text-base-content/40">
+        <h1 class="text-2xl font-bold tracking-tight text-base-content">
+          {name}
+        </h1>
+        <p class="mt-1 text-xs font-medium text-base-content/40">
           {language} • ⭐{stars.toLocaleString()} • Updated {updated}
         </p>
       </div>
     </div>
-    <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-      <div class="text-xs">
-        <div class="font-bold text-base-content">{stats.issues}</div>
-        <div class="text-base-content/40">Issues</div>
+    <div class="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <div>
+        <div
+          class="text-xl font-bold text-base-content"
+          data-counter={stats.issues}
+        >
+          {stats.issues}
+        </div>
+        <div class="text-xs text-base-content/40">Issues</div>
       </div>
-      <div class="text-xs">
-        <div class="font-bold text-base-content">{stats.prs}</div>
-        <div class="text-base-content/40">Open PRs</div>
+      <div>
+        <div
+          class="text-xl font-bold text-base-content"
+          data-counter={stats.prs}
+        >
+          {stats.prs}
+        </div>
+        <div class="text-xs text-base-content/40">Open PRs</div>
       </div>
-      <div class="text-xs">
-        <div class="font-bold text-base-content">{stats.active}</div>
-        <div class="text-base-content/40">Active</div>
+      <div>
+        <div
+          class="text-xl font-bold text-base-content"
+          data-counter={stats.active}
+        >
+          {stats.active}
+        </div>
+        <div class="text-xs text-base-content/40">Active</div>
       </div>
-      <div class="text-xs">
-        <div class="font-bold text-base-content">{stats.contributors}</div>
-        <div class="text-base-content/40">Contributors</div>
+      <div>
+        <div
+          class="text-xl font-bold text-base-content"
+          data-counter={stats.contributors}
+        >
+          {stats.contributors}
+        </div>
+        <div class="text-xs text-base-content/40">Contributors</div>
       </div>
     </div>
   </div>
@@ -112,7 +129,7 @@ export const FilterBar: FC<{
       <select
         key={filter.key}
         name={filter.key}
-        class="select select-sm select-bordered rounded-md"
+        class="select select-sm select-bordered rounded-full"
       >
         <option value="">{filter.label}</option>
         {filter.options.map((opt) => (

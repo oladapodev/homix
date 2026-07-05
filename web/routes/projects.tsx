@@ -2,7 +2,6 @@ import { syncProjectFromGitHub } from "@/api/github";
 import { ensureSchema } from "@/db/bootstrap";
 import { seedProjects } from "@/db/repositories";
 import type { WorkerEnv } from "@/platform/env";
-import { Toast } from "@/web/components/layout";
 import { isHtmx } from "@/web/htmx";
 import { Hono } from "hono";
 
@@ -18,15 +17,17 @@ export function createProjectRoutes() {
 
     if (!repo || !/^[\w-]+\/[\w.-]+$/.test(repo)) {
       return c.html(
-        <div class="text-xs text-error">Invalid format. Use owner/repo</div>,
-        400,
+        <span class="text-error">Invalid format — use owner/repo</span>,
+        422,
       );
     }
 
     const projectId = await syncProjectFromGitHub(c.env, repo);
     if (!projectId) {
       return c.html(
-        <div class="text-xs text-error">Failed to fetch repo from GitHub</div>,
+        <span class="text-error">
+          Could not fetch {repo} from GitHub — check the name and try again
+        </span>,
         422,
       );
     }
@@ -40,20 +41,12 @@ export function createProjectRoutes() {
     }
 
     return c.html(
-      <>
-        <form hx-post="/api/projects/add" hx-swap="innerHTML">
-          <input
-            type="text"
-            name="repo"
-            placeholder="owner/repo"
-            class="input input-bordered input-sm flex-1"
-          />
-          <button type="submit" class="btn btn-primary btn-sm">
-            Add
-          </button>
-        </form>
-        <Toast message={`Added ${repo}. Syncing...`} />
-      </>,
+      <span class="text-success">
+        Tracking {repo} —{" "}
+        <a href={`/projects/${projectId.toLowerCase()}`} class="link">
+          view project
+        </a>
+      </span>,
     );
   });
 

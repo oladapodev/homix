@@ -10,7 +10,8 @@ export const PrRowItem: FC<{
 }> = ({ pr, linkedIssueCount }) => (
   <a
     href={`#pr-${pr.id}`}
-    class="flex items-center gap-3 border-b border-base-300 px-4 py-3 transition hover:bg-base-200/50"
+    class="flex items-center gap-3 border-b border-base-200 px-5 py-3.5 transition last:border-b-0 hover:bg-base-200/40"
+    data-reveal
   >
     <PrStateChip state={pr.state} />
 
@@ -43,10 +44,10 @@ export const PrList: FC<{
   prs: PullRequest[];
   linkedIssueCounts: Map<string, number>;
 }> = ({ prs, linkedIssueCounts }) => (
-  <div class="rounded-3xl border border-base-300 bg-base-100 shadow-sm">
+  <div class="overflow-hidden rounded-3xl border border-base-300 bg-base-100 shadow-sm">
     {prs.length === 0 ? (
-      <div class="px-4 py-8 text-center text-sm text-base-content/40">
-        No pull requests found
+      <div class="px-4 py-14 text-center text-sm text-base-content/40">
+        No pull requests yet — synced from GitHub every 6 hours
       </div>
     ) : (
       prs.map((pr) => (

@@ -23,25 +23,25 @@ describe("worker routes", () => {
     const html = await response.text();
     expect(html).toContain("Mira");
     expect(html).toContain("Track open-source projects");
-    expect(html).toContain('href="/projects/mira-core"');
+    expect(html).toContain('href="/projects/oladapodev-homix"');
   });
 
   it("renders a project dashboard page", async () => {
     const response = await app.fetch(
-      new Request("http://localhost/projects/mira-core"),
+      new Request("http://localhost/projects/oladapodev-homix"),
       mockEnv(),
     );
 
     expect(response.status).toBe(200);
     const html = await response.text();
-    expect(html).toContain("Mira Core");
+    expect(html).toContain("Homix");
     expect(html).toContain("Issues");
     expect(html).toContain("Pull Requests");
   });
 
   it("renders issues tab by default", async () => {
     const response = await app.fetch(
-      new Request("http://localhost/projects/mira-core"),
+      new Request("http://localhost/projects/oladapodev-homix"),
       mockEnv(),
     );
 
@@ -52,7 +52,7 @@ describe("worker routes", () => {
 
   it("renders board tab", async () => {
     const response = await app.fetch(
-      new Request("http://localhost/projects/mira-core?tab=board"),
+      new Request("http://localhost/projects/oladapodev-homix?tab=board"),
       mockEnv(),
     );
 
@@ -64,7 +64,7 @@ describe("worker routes", () => {
 
   it("renders activity tab", async () => {
     const response = await app.fetch(
-      new Request("http://localhost/projects/mira-core?tab=activity"),
+      new Request("http://localhost/projects/oladapodev-homix?tab=activity"),
       mockEnv(),
     );
 
@@ -75,7 +75,7 @@ describe("worker routes", () => {
 
   it("renders pull requests tab", async () => {
     const response = await app.fetch(
-      new Request("http://localhost/projects/mira-core?tab=prs"),
+      new Request("http://localhost/projects/oladapodev-homix?tab=prs"),
       mockEnv(),
     );
 
@@ -97,7 +97,7 @@ describe("worker routes", () => {
   it("returns htmx validation fragments", async () => {
     const body = new FormData();
     body.set("title", "A");
-    body.set("projectId", "mira");
+    body.set("projectId", "oladapodev-homix");
     body.set("status", "todo");
     body.set("priority", "medium");
     body.set("type", "task");
@@ -120,7 +120,7 @@ describe("worker routes", () => {
     const env = mockEnv();
     const body = new FormData();
     body.set("title", "Add contribution guide");
-    body.set("projectId", "mira");
+    body.set("projectId", "oladapodev-homix");
     body.set("status", "todo");
     body.set("priority", "high");
     body.set("type", "task");
@@ -142,7 +142,7 @@ describe("worker routes", () => {
     expect(html).toContain('id="issue-intake"');
 
     const board = await app.fetch(
-      new Request("http://localhost/projects/mira-core?tab=board"),
+      new Request("http://localhost/projects/oladapodev-homix?tab=board"),
       env,
     );
     await expect(board.text()).resolves.toContain("Add contribution guide");
@@ -161,7 +161,7 @@ describe("worker routes", () => {
   it("redirects plain HTML issue form submissions to the project page", async () => {
     const body = new FormData();
     body.set("title", "Fallback form issue");
-    body.set("projectId", "mira");
+    body.set("projectId", "oladapodev-homix");
     body.set("status", "todo");
     body.set("priority", "low");
     body.set("type", "task");
@@ -177,7 +177,24 @@ describe("worker routes", () => {
     );
 
     expect(response.status).toBe(303);
-    expect(response.headers.get("location")).toBe("/projects/mira-core");
+    expect(response.headers.get("location")).toBe("/projects/oladapodev-homix");
+  });
+
+  it("rejects invalid repo format on project submission", async () => {
+    const body = new FormData();
+    body.set("repo", "not a repo");
+
+    const response = await app.fetch(
+      new Request("http://localhost/api/projects/add", {
+        method: "POST",
+        body,
+        headers: { "HX-Request": "true" },
+      }),
+      mockEnv(),
+    );
+
+    expect(response.status).toBe(422);
+    await expect(response.text()).resolves.toContain("Invalid format");
   });
 });
 

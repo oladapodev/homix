@@ -27,12 +27,11 @@ export interface GitHubPullRequest {
   merged_at: string | null;
 }
 
-async function githubFetch(
-  path: string,
-  token?: string,
-): Promise<Record<string, unknown> | null> {
+async function githubFetch(path: string, token?: string): Promise<unknown> {
   const headers: Record<string, string> = {
     accept: "application/vnd.github.v3+json",
+    // GitHub rejects requests without a User-Agent
+    "user-agent": "mira-tracker",
   };
   if (token) {
     headers.authorization = `token ${token}`;
@@ -41,7 +40,9 @@ async function githubFetch(
   try {
     const response = await fetch(`https://api.github.com${path}`, { headers });
     if (!response.ok) {
-      console.error(`GitHub API error: ${response.status} ${response.statusText}`);
+      console.error(
+        `GitHub API error: ${response.status} ${response.statusText}`,
+      );
       return null;
     }
     return response.json();
@@ -58,13 +59,13 @@ export async function fetchGitHubRepo(
   const data = (await githubFetch(`/repos/${repoSlug}`, token)) as Record<
     string,
     unknown
-  >;
+  > | null;
   if (!data || typeof data !== "object" || !("owner" in data)) return null;
 
-  const owner = (data.owner as Record<string, unknown>)?.login;
-  const [ownerName, repoName] = repoSlug.split("/");
+  const [ownerName = "", repoName = ""] = repoSlug.split("/");
+  if (!ownerName || !repoName) return null;
   return {
-    owner: ownerName || (owner as string),
+    owner: ownerName,
     repo: repoName,
     name: (data.name as string) || repoName,
     language: (data.language as string) || "unknown",
@@ -83,14 +84,21 @@ export async function fetchGitHubIssues(
   )) as Record<string, unknown>[];
   if (!Array.isArray(data)) return [];
 
-  return data.map((issue) => ({
-    number: (issue.number as number) || 0,
-    title: (issue.title as string) || "",
-    state: ((issue.state as string) || "open") as "open" | "closed",
-    user: { login: ((issue.user as Record<string, unknown>)?.login as string) || "unknown" },
-    created_at: (issue.created_at as string) || new Date().toISOString(),
-    updated_at: (issue.updated_at as string) || new Date().toISOString(),
-  }));
+  // GitHub issues API includes pull requests; keep plain issues only
+  return data
+    .filter((issue) => !("pull_request" in issue))
+    .map((issue) => ({
+      number: (issue.number as number) || 0,
+      title: (issue.title as string) || "",
+      state: ((issue.state as string) || "open") as "open" | "closed",
+      user: {
+        login:
+          ((issue.user as Record<string, unknown>)?.login as string) ||
+          "unknown",
+      },
+      created_at: (issue.created_at as string) || new Date().toISOString(),
+      updated_at: (issue.updated_at as string) || new Date().toISOString(),
+    }));
 }
 
 export async function fetchGitHubPullRequests(
@@ -107,7 +115,10 @@ export async function fetchGitHubPullRequests(
     number: (pr.number as number) || 0,
     title: (pr.title as string) || "",
     state: ((pr.state as string) || "open") as "open" | "closed" | "merged",
-    user: { login: ((pr.user as Record<string, unknown>)?.login as string) || "unknown" },
+    user: {
+      login:
+        ((pr.user as Record<string, unknown>)?.login as string) || "unknown",
+    },
     created_at: (pr.created_at as string) || new Date().toISOString(),
     merged_at: (pr.merged_at as string | null) || null,
   }));
@@ -129,7 +140,7 @@ export async function syncProjectFromGitHub(
 
   const createProjectSQL = `
     insert or replace into projects
-    (id, name, slug, repo, stars, language, status, summary, createdAt)
+    (id, name, slug, repo, stars, language, status, summary, created_at)
     values (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
@@ -142,7 +153,8 @@ export async function syncProjectFromGitHub(
       repo.stargazers_count,
       repo.language,
       "active",
-      repo.description,
+      repo.description ||
+        `Open-source work in ${repo.owner}/${repo.repo}, tracked live on Mira.`,
       new Date().toISOString(),
     )
     .run();
@@ -151,7 +163,7 @@ export async function syncProjectFromGitHub(
     const issueId = `${projectId}-issue-${issue.number}`;
     const insertIssueSql = `
       insert or replace into issues
-      (id, projectId, title, status, priority, type, assignee, labels, createdAt, updatedAt)
+      (id, project_id, title, status, priority, type, assignee, labels, created_at, updated_at)
       values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
@@ -175,7 +187,7 @@ export async function syncProjectFromGitHub(
     const prId = `${projectId}-pr-${pr.number}`;
     const insertPrSql = `
       insert or replace into pull_requests
-      (id, projectId, number, title, state, author, createdAt, mergedAt)
+      (id, project_id, number, title, state, author, created_at, merged_at)
       values (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 

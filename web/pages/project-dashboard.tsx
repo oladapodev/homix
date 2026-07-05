@@ -9,6 +9,7 @@ import { IssueList } from "@/web/components/issue-list";
 import { PrList } from "@/web/components/pr-list";
 import { AppLayout } from "@/web/components/shell";
 import { FilterBar, ProjectHeader, TabNav } from "@/web/components/shell";
+import { timeAgo } from "@/web/format";
 import { KanbanBoard } from "@/web/fragments/mira";
 import { ActivityTimeline } from "@/web/fragments/mira";
 
@@ -57,6 +58,13 @@ export function ProjectDashboardPage({
     { key: "activity", label: "Activity" },
   ];
 
+  const timestamps = [
+    ...issues.map((i) => i.updatedAt),
+    ...pullRequests.map((pr) => pr.createdAt),
+    project.createdAt,
+  ].filter(Boolean);
+  const lastUpdated = timestamps.sort().at(-1);
+
   return (
     <AppLayout title={project.name}>
       <ProjectHeader
@@ -64,7 +72,7 @@ export function ProjectDashboardPage({
         language={project.language}
         stars={project.stars}
         stats={stats}
-        updated="45min ago"
+        updated={lastUpdated ? timeAgo(lastUpdated) : "recently"}
       />
 
       <TabNav
